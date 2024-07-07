@@ -1,0 +1,39 @@
+const router = require('express').Router(); 
+const {
+    getUsers, 
+    getSingleUser, 
+    createUser, 
+    updateUser, 
+    deleteUser,
+    addFriend, 
+    removeFriend
+} = require('../../controllers/userController'); 
+
+const { removeAssociatedThoughts } = require('../../controllers/userController');
+
+// /api/users 
+router.route('/')
+    .get(getUsers)
+    .post(createUser); 
+
+// /api/users/:userId 
+router.route('/:userId')
+    .get(getSingleUser)
+    .put(updateUser)
+    .delete(deleteUser) 
+    .delete(async (req, res) => {
+        try {
+            const deletedUser = await deleteUser(req.params.userId); 
+            await removeAssociatedThoughts(deletedUser.thoughts); 
+            res.status(200).json({ message: 'User and associated thoughts deleted'});
+        } else {
+            res.status(500).json(err);
+        }
+    });
+
+// /api/users/:userId/friends/:friendId 
+router.route('/:userId/friends/:friendId')
+    .post(addFriend)
+    .delete(removeFriend);
+
+module.exports = router; 
