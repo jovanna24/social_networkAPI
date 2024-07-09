@@ -1,12 +1,15 @@
-const User = require('../models/User');
-const Thought = require('../models/Thought');
+const { ObjectId } = require('mongoose').Types; 
+const { User, Thought, Reaction } = require('../models'); 
 
-const deleteUser = async (userId) => {
-    const deletedUser = await User.findByIdAndDelete(userId);
-    if (!deletedUser) {
-        throw new Error('User not found');
+module.exports = {
+    async getUsers(req, res) {
+        try {
+            const users = await User.find(); 
+
+            const userObj = {
+                users, 
+                
+            }
+        }
     }
-    return deletedUser;
 }
-
-module.exports = { deleteUser };

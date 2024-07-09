@@ -20,16 +20,7 @@ router.route('/')
 router.route('/:userId')
     .get(getSingleUser)
     .put(updateUser)
-    .delete(deleteUser) 
-    .delete(async (req, res) => {
-        try {
-            const deletedUser = await deleteUser(req.params.userId); 
-            await removeAssociatedThoughts(deletedUser.thoughts); 
-            res.status(200).json({ message: 'User and associated thoughts deleted'});
-        } else {
-            res.status(500).json(err);
-        }
-    });
+    .delete(deleteUser);
 
 // /api/users/:userId/friends/:friendId 
 router.route('/:userId/friends/:friendId')
