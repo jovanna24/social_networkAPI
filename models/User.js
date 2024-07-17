@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose'); 
+const { Schema, model, default: mongoose } = require('mongoose'); 
 const thoughtSchema = require('./Thought');  
 const reactionSchema = require('./Reaction'); 
 
@@ -18,11 +18,11 @@ const userSchema = new Schema(
             match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         }, 
         thoughts: [{
-            type: Schema.Types.ObjectId, 
+            type: mongoose.Types.ObjectId, 
             ref: 'Thought'
         }],
         friends: [{
-            type: Schema.Types.ObjectId, 
+            type: mongoose.Types.ObjectId, 
             ref: 'User'
         }]
 

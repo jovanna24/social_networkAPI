@@ -72,13 +72,12 @@ module.exports = {
                 { $pull: { thoughts: req.params.thoughtId } }
             );
 
-            await Reaction.deleteMany(
-                { thoughtId: req.params.thoughtId }
-            );  
+            // await reactionSchema.deleteMany(
+            //     { thoughtId: req.params.thoughtId }
+            // );  
             res.status(200).json({ message: 'Thought deleted successfully' }); 
         } catch (err) {
-            res.status(400).json(err);
-        }
+            res.status(400).json({ message: 'Failed to delete thought', error: err.message });        }
     },
     // addReaction, POST a reaction to a thought 
     async addReaction(req, res) {
@@ -103,7 +102,7 @@ module.exports = {
     // removeReaction, delete a reaction from a thought 
     async removeReaction(req, res) {
         try{
-            const updatedThought = await Thought.findByIdAndUpdate(
+            const updatedThought = await Thought.findByIdAndDelete(
                 thoughtId, 
                 { $pull: { reactions: { _id: reactionId } } },
                 { new: true }
@@ -113,7 +112,6 @@ module.exports = {
             }
             res.status(200).json(updatedThought);
         } catch (err) {
-            res.status(400).json(err);
-        }
+            res.status(400).json({ message: 'Failed to delete reaction', error: err.message });        }
     }
 };

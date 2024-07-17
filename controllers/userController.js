@@ -57,11 +57,11 @@ module.exports = {
             }
             // delete related thoughts and reactions 
             await Thought.deleteMany({ user: req.params.userId }); 
-            await Reaction.deleteMany({ user: req.params.userId }); 
+            // await reactionSchema.deleteMany({ user: req.params.userId }); 
 
             res.status(200).json({ message: 'User deleted successfully! '}); 
         } catch (err) {
-            res.status(400).json(err); 
+            res.status(400).json({ message: 'Failed to delete user', error: err.message });
         }
     }, 
 
