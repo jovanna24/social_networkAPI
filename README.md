@@ -52,11 +52,9 @@
         - DELETE: Remove a friend
 
 ## Contribution <a name="contribution"></a>
-- Handlebars documentation: https://handlebarsjs.com/
-- Sequelize documentation: https://sequelize.org/docs/v6/ 
-- Dotenv documentation: https://www.npmjs.com/package/dotenv
-- Node-postgress documentation: https://www.npmjs.com/package/pg
-- Mini-Project: Travel Planner
+- Express Documentation: https://expressjs.com/en/guide/routing.html
+- Mongoose Documentation: https://mongoosejs.com/docs/guide.html
+- Mini-Project: Module 18 Mini-Project: Student Statistics Back-End
 - BootCampSpot Tutoring Services
 
 ## Examples <a name="examples"></a> 
