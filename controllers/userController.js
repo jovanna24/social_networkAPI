@@ -67,45 +67,49 @@ module.exports = {
 
     // method to add a friend 
     async addFriend(req, res) {
-        try{
-            const user = await User.findById(req.params.userId); 
-            const friendId = req.body.friendId; 
+        try {
+            const userId = req.params.userId;
+            const { friendId } = req.body; // Destructure friendId from req.body
+
+            if (!friendId) {
+                return res.status(400).json({ message: 'Friend ID is required' });
+            }
+
+            const user = await User.findOneAndUpdate(
+                { _id: userId }, 
+                { $addToSet: { friends: friendId } }, // Use $addToSet to avoid adding duplicates
+                { new: true }
+            );
 
             if (!user) {
-                return res.status(404).json({ message: 'User not found' }); 
+                return res.status(404).json({ message: 'User not found' });
             }
-            if (user.friends.includes(friendId)) {
-                return res.status(400).json({ message: 'Already friends!' });
-            }
-            user.friends.push(friendId); 
-            await user.save(); 
 
-            res.status(200).json(user); 
+            res.status(200).json(user);
         } catch (err) {
-            res.status(400).json(err); 
+            console.error('Error adding friend:', err);
+            res.status(500).json({ message: 'Failed to add friend', error: err.message });
         }
     },
 
     // method to remove a friend
     async removeFriend(req, res) {
         try {
-            const user = await User.findById(req.params.userId); 
-            const friendId = req.body.friendId; 
-            if(!user) {
-                return res.status(404).json({
-                    message: 'User not found' 
-                });
-            }
-            if (!user.friends.includes(friendId)) {
-                return res.status(400).json({ message: 'Not friends' }); 
-            }
-            // explain this line of code
-            user.friends = user.friends.filter(f => f.toString() !== friendId.toString());
-            await user.save(); 
+            const user = await User.findOneAndUpdate(
+                { _id: req.params.userId }, 
+                { $pull: { friend: { friendId: req.params.friendId } } },
+                { runValidators: true, new: true }
+            );
 
-            res.status(200).json(user);
+            if(!user) {
+                return res
+                .status(404)
+                .json({ message: 'No user found with that ID' });
+            }
+
+            res.json(user);
         } catch (err) {
-            res.status(400).json(err);
+            res.status(500).json({ message: 'Failed to remove friend', error: err.message });
         }
     }
 };

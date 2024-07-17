@@ -102,11 +102,13 @@ module.exports = {
     // removeReaction, delete a reaction from a thought 
     async removeReaction(req, res) {
         try{
-            const updatedThought = await Thought.findByIdAndDelete(
-                thoughtId, 
+            const { thoughtId, reactionId } = req.params; // Destructure thoughtId and reactionId from req.params
+
+            const updatedThought = await Thought.findByIdAndUpdate(
+                thoughtId,
                 { $pull: { reactions: { _id: reactionId } } },
                 { new: true }
-            ); 
+            );
             if (!updatedThought) {
                 return res.status(404).json({ message: 'Thought not found' });
             }
